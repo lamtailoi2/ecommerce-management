@@ -10,8 +10,8 @@ void on_browseButton_clicked(GtkButton *button, gpointer user_data) {
     // Show the dialog
     gtk_dialog_run(GTK_DIALOG(dialog));
 
-    // Destroy the dialog after it's closed
-    gtk_widget_destroy(dialog);
+    // Destroy the dialog after it's closed 
+    gtk_widget_destroy(dialog); //comment by Loi
 }
 
 int main(int argc, char *argv[]) {
