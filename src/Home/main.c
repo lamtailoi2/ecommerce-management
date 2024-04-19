@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 
 
-void on_tool_but1_clicked(GtkToolButton *button, gpointer user_data){
+void on_tool_button_clicked(GtkToolButton *button, gpointer user_data){
     
 }
 
