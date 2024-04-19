@@ -8,35 +8,30 @@
     <property name="default-height">600</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerBar">
-        <property name="can-focus">False</property>
         <property name="show-close-button">True</property>
         <child>
           <object class="GtkImage" id="logoImage">
-            <property name="can-focus">False</property>
+            <property name="file">path_to_your_logo.png</property>
+            <packing>
+              <property name="pack-type">start</property>
+            </packing>
           </object>
         </child>
         <child>
           <object class="GtkButton" id="loginButton">
             <property name="label">Login</property>
-            <property name="can-focus">False</property>
-            <property name="receives-default">False</property>
+            <packing>
+              <property name="pack-type">end</property>
+            </packing>
           </object>
-          <packing>
-            <property name="pack-type">end</property>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkButton" id="registerButton">
             <property name="label">Register</property>
-            <property name="can-focus">False</property>
-            <property name="receives-default">False</property>
-            <property name="valign">end</property>
+            <packing>
+              <property name="pack-type">end</property>
+            </packing>
           </object>
-          <packing>
-            <property name="pack-type">end</property>
-            <property name="position">2</property>
-          </packing>
         </child>
       </object>
     </child>

@@ -4,7 +4,6 @@
 #include <stdbool.h>
 #include <string.h>
 
-#define MAX_USERS 100
 
 gboolean validate_registration(const char *username, const char *email, const char *password)
 {
@@ -224,24 +223,19 @@ void on_registerButton_clicked(GtkButton *button, gpointer user_data)
     const char *password = gtk_entry_get_text(passwordEntry);
     write_user_to_csv(username, email, password);
 
-    if (validate_registration(username, email, password))
-    {
-        // The registration details are valid. Open the home page.
-        GtkWidget *homeWindow;
-        GtkBuilder *homeBuilder;
-        homeBuilder = gtk_builder_new_from_file("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Home/Home.glade");
-        homeWindow = GTK_WIDGET(gtk_builder_get_object(homeBuilder, "homeWindow"));
-        gtk_widget_show_all(homeWindow);
-        gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object(builder, "registerWindow")));
-    }
-    else
-    {
-        // The registration details are invalid. Show an error message.
-        GtkWidget *dialog;
-        dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Invalid registration details!");
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
-    }
+    // if (validate_registration(username, email, password))
+    // {
+    //     // The registration details are valid. Open the home page.
+    //     gtk_widget_destroy(register);
+    // }
+    // else
+    // {
+    //     // The registration details are invalid. Show an error message.
+    //     GtkWidget *dialog;
+    //     dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Invalid registration details!");
+    //     gtk_dialog_run(GTK_DIALOG(dialog));
+    //     gtk_widget_destroy(dialog);
+    // }
 }
 
 void activate(GtkApplication *app, gpointer user_data)
@@ -250,14 +244,13 @@ void activate(GtkApplication *app, gpointer user_data)
     GtkWidget *window;
     GtkWidget *registerButton;
 
-    builder = gtk_builder_new_from_file("Register.glade");
+    builder = gtk_builder_new_from_file("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Register/Register.glade");
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
     registerButton = GTK_WIDGET(gtk_builder_get_object(builder, "registerButton"));
 
-    //set title
+    // set title
     gtk_window_set_title(GTK_WINDOW(window), "Register");
 
-    
     // Connect the "clicked" signal of the register button to the on_registerButton_clicked function
     g_signal_connect(registerButton, "clicked", G_CALLBACK(on_registerButton_clicked), builder);
 
@@ -279,4 +272,3 @@ int main(int argc, char *argv[])
 
     return status;
 }
-

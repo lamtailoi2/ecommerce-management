@@ -8,6 +8,7 @@
         "complex": "cpp",
         "gtk.h": "c",
         "stdio.h": "c",
-        "password.h": "c"
+        "password.h": "c",
+        "ios": "c"
     }
 }

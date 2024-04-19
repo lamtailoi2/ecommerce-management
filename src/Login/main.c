@@ -109,19 +109,19 @@ void on_loginButton_clicked(GtkButton *button, gpointer user_data)
     }
     printf("Login successful\n");
 
-    homeBuilder = gtk_builder_new_from_file("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Home/Home.glade");
-    homeWindow = GTK_WIDGET(gtk_builder_get_object(homeBuilder, "homeWindow"));
+    // homeBuilder = gtk_builder_new_from_file("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Home/Home.glade");
+    // homeWindow = GTK_WIDGET(gtk_builder_get_object(homeBuilder, "homeWindow"));
 
-    if (homeWindow == NULL)
-    {
+    // if (homeWindow == NULL)
+    // {
         
-        printf("Failed to get homeWindow from builder\n");
-        return;
-    }
+    //     printf("Failed to get homeWindow from builder\n");
+    //     return;
+    // }
 
-    gtk_widget_show_all(homeWindow);
-    gtk_main();
-    gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object(builder, "window")));
+    // gtk_widget_show_all(homeWindow);
+    // gtk_main();
+    // gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object(builder, "window")));
 }
 
 void activate(GtkApplication *app, gpointer user_data)
@@ -130,7 +130,7 @@ void activate(GtkApplication *app, gpointer user_data)
     GtkWidget *window;
     GtkWidget *loginButton; // Declare loginButton here
 
-    builder = gtk_builder_new_from_file("Login.glade");
+    builder = gtk_builder_new_from_file("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Login/Login.glade");
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
     loginButton = GTK_WIDGET(gtk_builder_get_object(builder, "loginButton"));
 
