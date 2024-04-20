@@ -1,23 +1,17 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
-#include "password.h"
+#include "/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Headers/password.h"
 #include <stdbool.h>
 #include <string.h>
 
-// This is your authentication function. It should check the username, email, and password
-// against your authentication system and return TRUE if the user is authenticated, FALSE otherwise.
-// gboolean authenticate(const char *username, const char *email, const char *password) {
-//     // TODO: Implement this function
-//     return TRUE;
-// }
 
 gboolean validate_registration(const char *username, const char *email, const char *password)
 {
-    // TODO: Implement this function to validate the registration details
-    // For now, we'll assume that any non-empty username, email, and password are valid
+
     return username[0] != '\0' && email[0] != '\0' && password[0] != '\0';
 }
 
+// Encrypt the password
 void encrypt_password(const char *password, char *encryptedPassword, int key)
 {
     int i = 0;
@@ -29,9 +23,10 @@ void encrypt_password(const char *password, char *encryptedPassword, int key)
     encryptedPassword[i] = '\0';
 }
 
+// Write the user details to a CSV file
 void write_user_to_csv(const char *username, const char *email, const char *password)
 {
-    FILE *file = freopen("users.csv", "a", stdout);
+    FILE *file = freopen("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/textDB/users.csv", "a", stdout);
 
     if (file != NULL)
     {
@@ -44,10 +39,11 @@ void write_user_to_csv(const char *username, const char *email, const char *pass
     }
     else
     {
-        printf("Failed to open users.csv\n");
+        printf("Failed to open \n");
     }
 }
 
+// check valid email
 bool is_valid_email(const char *email)
 {
     // Check if the email contains an '@' symbol
@@ -71,6 +67,16 @@ bool is_valid_email(const char *email)
     }
 
     return true;
+}
+
+bool is_password_match(const char *password, const char *confirmPassword)
+{
+    // Compare the password and confirm password
+    if (strcmp(password, confirmPassword) == 0)
+    {
+        return true;
+    }
+    return false;
 }
 
 bool is_valid_username(const char *username)
@@ -102,24 +108,47 @@ bool is_valid_password(const char *password)
     return true;
 }
 
-// bool is_unique_email(const char *email)
-// {
+bool is_unique_username(const char *username)
+{
+    FILE *file = freopen("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/textDB/users.csv", "r", stdin);
+    if (file != NULL)
+    {
+        char line[256];
+        while (fgets(line, sizeof(line), file))
+        {
+            char storedUsername[256];
+            sscanf(line, "%[^,],", storedUsername);
+            if (strcmp(username, storedUsername) == 0)
+            {
+                fclose(file);
+                return false;
+            }
+        }
+        fclose(file);
+    }
+    return true;
+}
 
-//     FILE *file = fopen("users.csv", "r");
-//     if (file != NULL) {
-//         char line[256];
-//         while (fgets(line, sizeof(line), file)) {
-//             char storedEmail[256];
-//             sscanf(line, "%*[^,], %[^,]", storedEmail);
-//             if (strcmp(email, storedEmail) == 0) {
-//                 fclose(file);
-//                 return false;
-//             }
-//         }
-//         fclose(file);
-//     }
-//     return true;
-// }
+bool is_unique_email(const char *email)
+{
+    FILE *file = freopen("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/textDB/users.csv", "r", stdin);
+    if (file != NULL)
+    {
+        char line[256];
+        while (fgets(line, sizeof(line), file))
+        {
+            char storedEmail[256];
+            sscanf(line, "%*[^,], %[^,]", storedEmail);
+            if (strcmp(email, storedEmail) == 0)
+            {
+                fclose(file);
+                return false;
+            }
+        }
+        fclose(file);
+    }
+    return true;
+}
 
 void on_registerButton_clicked(GtkButton *button, gpointer user_data)
 {
@@ -128,12 +157,23 @@ void on_registerButton_clicked(GtkButton *button, gpointer user_data)
     GtkEntry *usernameEntry = GTK_ENTRY(gtk_builder_get_object(builder, "usernameEntry"));
     GtkEntry *emailEntry = GTK_ENTRY(gtk_builder_get_object(builder, "emailEntry"));
     GtkEntry *passwordEntry = GTK_ENTRY(gtk_builder_get_object(builder, "passwordEntry"));
+    GtkEntry *confirmPasswordEntry = GTK_ENTRY(gtk_builder_get_object(builder, "confirmPasswordEntry"));
 
     if (!is_valid_username(gtk_entry_get_text(passwordEntry)))
     {
         // The username is not valid. Show an error message.
         GtkWidget *dialog;
         dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Invalid username!");
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        return;
+    }
+
+    if (!is_unique_username(gtk_entry_get_text(usernameEntry)))
+    {
+        // The username is already taken. Show an error message.
+        GtkWidget *dialog;
+        dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Username is already taken!");
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
         return;
@@ -150,7 +190,6 @@ void on_registerButton_clicked(GtkButton *button, gpointer user_data)
     }
     if (!is_valid_email(gtk_entry_get_text(emailEntry)))
     {
-        printf("In");
         // The email is not valid. Show an error message.
         GtkWidget *dialog;
         dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Invalid email!");
@@ -159,35 +198,44 @@ void on_registerButton_clicked(GtkButton *button, gpointer user_data)
         return;
     }
 
-    // if (!is_unique_email(email)) {
-    //     // The email is not unique. Show an error message.
-    //     GtkWidget *dialog;
-    //     dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Email already exists!");
-    //     gtk_dialog_run(GTK_DIALOG(dialog));
-    //     gtk_widget_destroy(dialog);
-    //     return;
-    // }
-    // placeholder
-    const char *username = gtk_entry_get_text(usernameEntry);
+    if (!is_unique_email(gtk_entry_get_text(emailEntry)))
+    {
+        // The email is already taken. Show an error message.
+        GtkWidget *dialog;
+        dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Email is already taken!");
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        return;
+    }
+
+    if (!is_password_match(gtk_entry_get_text(passwordEntry), gtk_entry_get_text(confirmPasswordEntry)))
+    {
+        // The passwords do not match. Show an error message.
+        GtkWidget *dialog;
+        dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Passwords do not match!");
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        return;
+    }
+
+    const char *username = gtk_entry_get_text(usernameEntry); // get value from user
     const char *email = gtk_entry_get_text(emailEntry);
     const char *password = gtk_entry_get_text(passwordEntry);
     write_user_to_csv(username, email, password);
 
-    if (validate_registration(username, email, password)) {
-        // The registration details are valid. Open the home page.
-        GtkWidget *homeWindow;
-        GtkBuilder *homeBuilder;
-        homeBuilder = gtk_builder_new_from_file("Home.glade");
-        homeWindow = GTK_WIDGET(gtk_builder_get_object(homeBuilder, "homeWindow"));
-        gtk_widget_show_all(homeWindow);
-        gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object(builder, "registerWindow")));
-    } else {
-        // The registration details are invalid. Show an error message.
-        GtkWidget *dialog;
-        dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Invalid registration details!");
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
-    }
+    // if (validate_registration(username, email, password))
+    // {
+    //     // The registration details are valid. Open the home page.
+    //     gtk_widget_destroy(register);
+    // }
+    // else
+    // {
+    //     // The registration details are invalid. Show an error message.
+    //     GtkWidget *dialog;
+    //     dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Invalid registration details!");
+    //     gtk_dialog_run(GTK_DIALOG(dialog));
+    //     gtk_widget_destroy(dialog);
+    // }
 }
 
 void activate(GtkApplication *app, gpointer user_data)
@@ -196,9 +244,12 @@ void activate(GtkApplication *app, gpointer user_data)
     GtkWidget *window;
     GtkWidget *registerButton;
 
-    builder = gtk_builder_new_from_file("Register.glade");
+    builder = gtk_builder_new_from_file("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Register/Register.glade");
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
     registerButton = GTK_WIDGET(gtk_builder_get_object(builder, "registerButton"));
+
+    // set title
+    gtk_window_set_title(GTK_WINDOW(window), "Register");
 
     // Connect the "clicked" signal of the register button to the on_registerButton_clicked function
     g_signal_connect(registerButton, "clicked", G_CALLBACK(on_registerButton_clicked), builder);

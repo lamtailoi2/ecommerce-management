@@ -5,6 +5,10 @@
         "__threading_support": "cpp",
         "cstring": "cpp",
         "locale": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "gtk.h": "c",
+        "stdio.h": "c",
+        "password.h": "c",
+        "ios": "c"
     }
 }
