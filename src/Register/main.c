@@ -217,11 +217,31 @@ void on_registerButton_clicked(GtkButton *button, gpointer user_data)
         gtk_widget_destroy(dialog);
         return;
     }
-
+    // The registration is successful. Show a success message.
+    GtkWidget *dialog;
+    dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Registration successful!");
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
     const char *username = gtk_entry_get_text(usernameEntry); // get value from user
     const char *email = gtk_entry_get_text(emailEntry);
     const char *password = gtk_entry_get_text(passwordEntry);
     write_user_to_csv(username, email, password);
+    
+    // if (validate_registration(username, email, password))
+    // {
+    //     // The registration details are valid. Open the home page.
+    //     gtk_widget_destroy(register);
+    // }
+    // else
+    // {
+    //     // The registration details are invalid. Show an error message.
+    //     GtkWidget *dialog;
+    //     dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Invalid registration details!");
+    //     gtk_dialog_run(GTK_DIALOG(dialog));
+    //     gtk_widget_destroy(dialog);
+    // }
+    
+    
 
     // if (validate_registration(username, email, password))
     // {

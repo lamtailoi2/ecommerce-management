@@ -21,11 +21,11 @@
 
 void on_registerButton_clicked(GtkButton *button, gpointer user_data)
 {
-    int result = system("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Register/myprogram");
+    int result = system("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Register/register");
     if (result == -1) {
         perror("system");
     }
-    result = system("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Home/Home");
+    result = system("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Home/myHome");
     if (result == -1) {
         perror("system");
     }
@@ -39,12 +39,7 @@ void on_loginButton_clicked(GtkButton *button, gpointer user_data)
         perror("system");
         return;
     }
-
-    result = system("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Home/Home");
-    if (result == -1) {
-        perror("system");
-    }
-    gtk_widget_destroy(welcomeWindow);
+    
 }
 
 void activate_app(GtkApplication *app, gpointer user_data)

@@ -108,6 +108,10 @@ void on_loginButton_clicked(GtkButton *button, gpointer user_data)
         return;
     }
     printf("Login successful\n");
+    int result = system("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Home/myHome");
+    GtkWidget *window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
+    gtk_widget_destroy(window);
+
 
     // homeBuilder = gtk_builder_new_from_file("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Home/Home.glade");
     // homeWindow = GTK_WIDGET(gtk_builder_get_object(homeBuilder, "homeWindow"));
