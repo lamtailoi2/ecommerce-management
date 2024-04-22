@@ -5,11 +5,11 @@
 #include <string.h>
 
 
-gboolean validate_registration(const char *username, const char *email, const char *password)
-{
+// gboolean validate_registration(const char *username, const char *email, const char *password)
+// {
 
-    return username[0] != '\0' && email[0] != '\0' && password[0] != '\0';
-}
+//     return username[0] != '\0' && email[0] != '\0' && password[0] != '\0';
+// }
 
 // Encrypt the password
 void encrypt_password(const char *password, char *encryptedPassword, int key)
@@ -23,8 +23,8 @@ void encrypt_password(const char *password, char *encryptedPassword, int key)
     encryptedPassword[i] = '\0';
 }
 
-// Write the user details to a CSV file
-void write_user_to_csv(const char *username, const char *email, const char *password)
+//Store user to csv
+void store_user_to_csv(const char *username, const char *email, const char *password)
 {
     FILE *file = freopen("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/textDB/users.csv", "a", stdout);
 
@@ -225,37 +225,12 @@ void on_registerButton_clicked(GtkButton *button, gpointer user_data)
     const char *username = gtk_entry_get_text(usernameEntry); // get value from user
     const char *email = gtk_entry_get_text(emailEntry);
     const char *password = gtk_entry_get_text(passwordEntry);
-    write_user_to_csv(username, email, password);
+    store_user_to_csv(username, email, password);
+    int result = system("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Home/myHome");
+    if (result == -1) {
+        perror("system");
+    }
     
-    // if (validate_registration(username, email, password))
-    // {
-    //     // The registration details are valid. Open the home page.
-    //     gtk_widget_destroy(register);
-    // }
-    // else
-    // {
-    //     // The registration details are invalid. Show an error message.
-    //     GtkWidget *dialog;
-    //     dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Invalid registration details!");
-    //     gtk_dialog_run(GTK_DIALOG(dialog));
-    //     gtk_widget_destroy(dialog);
-    // }
-    
-    
-
-    // if (validate_registration(username, email, password))
-    // {
-    //     // The registration details are valid. Open the home page.
-    //     gtk_widget_destroy(register);
-    // }
-    // else
-    // {
-    //     // The registration details are invalid. Show an error message.
-    //     GtkWidget *dialog;
-    //     dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Invalid registration details!");
-    //     gtk_dialog_run(GTK_DIALOG(dialog));
-    //     gtk_widget_destroy(dialog);
-    // }
 }
 
 void activate(GtkApplication *app, gpointer user_data)

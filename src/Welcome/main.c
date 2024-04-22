@@ -25,10 +25,7 @@ void on_registerButton_clicked(GtkButton *button, gpointer user_data)
     if (result == -1) {
         perror("system");
     }
-    result = system("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Home/myHome");
-    if (result == -1) {
-        perror("system");
-    }
+    
 }
 
 void on_loginButton_clicked(GtkButton *button, gpointer user_data)
@@ -39,7 +36,6 @@ void on_loginButton_clicked(GtkButton *button, gpointer user_data)
         perror("system");
         return;
     }
-    
 }
 
 void activate_app(GtkApplication *app, gpointer user_data)
