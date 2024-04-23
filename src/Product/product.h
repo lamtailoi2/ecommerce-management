@@ -13,5 +13,5 @@ typedef struct
 void addProduct(Product *p, char id[], char name[], float price, int quantity);
 void removeProduct(Product *p, char id[]);
 void updateProduct(Product *p, char id[], char name[], float price, int quantity);
-
+void totalPrice(Product *p);
 #endif

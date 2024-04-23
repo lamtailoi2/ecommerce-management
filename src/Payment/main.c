@@ -44,6 +44,8 @@ void activate_app(GtkApplication *app, gpointer user_data)
     g_signal_connect(order_button, "clicked", G_CALLBACK(on_order_button_clicked), window);
     g_signal_connect(back_button, "clicked", G_CALLBACK(on_back_button_clicked), window);
 
+    // gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
+
     gtk_application_add_window(app, GTK_WINDOW(window));
     gtk_widget_show_all(window);
 }
