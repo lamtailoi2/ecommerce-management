@@ -226,10 +226,7 @@ void on_registerButton_clicked(GtkButton *button, gpointer user_data)
     const char *email = gtk_entry_get_text(emailEntry);
     const char *password = gtk_entry_get_text(passwordEntry);
     store_user_to_csv(username, email, password);
-    int result = system("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Home/myHome");
-    if (result == -1) {
-        perror("system");
-    }
+    gtk_widget_hide(GTK_WIDGET(user_data));
     
 }
 
