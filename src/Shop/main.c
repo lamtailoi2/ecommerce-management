@@ -333,6 +333,7 @@ void on_but1_clicked(GtkButton *button, gpointer user_data)
 
 void create_and_show_window()
 {
+    showProduct();
     // gulong handler_id = g_signal_connect(browseButton, "clicked", G_CALLBACK(on_browseButton_clicked), NULL);
     // // if (handler_id == 0)
     // // {
