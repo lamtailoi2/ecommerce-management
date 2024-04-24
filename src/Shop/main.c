@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
 #include "/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Product/product.h"
 #define MAX_PRODUCT 100
 void create_and_show_window();
@@ -333,7 +334,6 @@ void on_but1_clicked(GtkButton *button, gpointer user_data)
 
 void create_and_show_window()
 {
-    showProduct();
     // gulong handler_id = g_signal_connect(browseButton, "clicked", G_CALLBACK(on_browseButton_clicked), NULL);
     // // if (handler_id == 0)
     // // {
@@ -668,7 +668,6 @@ void create_and_show_window()
 
 void create_and_show_window1()
 {
-    showProduct();
     GtkWidget *window;
     // button
     GtkWidget *but1;
@@ -762,7 +761,7 @@ void showProduct() {
 
     // Create a new GtkTreeView and a GtkListStore
     tree_view = gtk_tree_view_new();
-    list_store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_STRING, GDK_TYPE_TEXTURE);
+    list_store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_STRING, GDK_TYPE_PIXBUF);
 
     // Set up the columns
     renderer = gtk_cell_renderer_text_new();
@@ -817,7 +816,7 @@ int main(int argc, char *argv[])
     gtk_init(&argc, &argv);
 
     create_and_show_window();
-
+    showProduct();
     
 
     gtk_main();
