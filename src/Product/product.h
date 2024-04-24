@@ -12,7 +12,7 @@ typedef struct
 } Product;
 
 void addProduct(Product productsArr[], const char *id, const char *name, float price, int quantity, const char *img);
-void removeProduct(Product *p, char id[]);
+void removeProduct(Product productsArr[], char id[]);
 void updateProduct(Product *p, char id[], char name[], float price, int quantity);
 void totalPrice(Product *p);
 #endif

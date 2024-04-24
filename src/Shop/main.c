@@ -89,10 +89,9 @@ void on_confirmButton_clicked(GtkButton *button, gpointer user_data)
 
     addProduct(productsArr, id, name, price, quantity, "images/char/1.jpg");
 
-    // Get the window widget from the GtkBuilder
     GtkWidget *window = GTK_WIDGET(gtk_builder_get_object(builder, "addProduct"));
 
-    // Show a dialog popup to indicate that the product has been added successfully
+    // Show a dialog to notify
     GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Product added successfully!");
     gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
@@ -105,6 +104,83 @@ void on_confirmButton_clicked(GtkButton *button, gpointer user_data)
 
     // Set the focus back to the ID entry field
     gtk_widget_grab_focus(entryID);
+}
+
+void removeProduct(Product productsArr[], char id[])
+{
+    // Find the product with the given ID
+    int index = -1;
+    for (int i = 0; i < initIndex; i++)
+    {
+        if (strcmp(productsArr[i].id, id) == 0)
+        {
+            index = i;
+            break;
+        }
+    }
+
+    // If the product is found
+    if (index != -1)
+    {
+        // Remove the product from the array
+        for (int i = index; i < initIndex - 1; i++)
+        {
+            productsArr[i] = productsArr[i + 1];
+        }
+        initIndex--;
+
+        // Write the updated products to the file
+        FILE *file = fopen("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/textDB/products.csv", "w");
+        if (file != NULL)
+        {
+            for (int i = 0; i < initIndex; i++)
+            {
+                fprintf(file, "%s,%s,%.2f,%d,%s\n", productsArr[i].id, productsArr[i].name, productsArr[i].price, productsArr[i].quantity, productsArr[i].img);
+            }
+            fclose(file);
+        }
+        else
+        {
+            printf("Failed to open file\n");
+        }
+    }
+}
+
+void on_delete_clicked(GtkButton *button, gpointer user_data)
+{
+    GtkBuilder *builder = (GtkBuilder *)user_data;
+    GtkWidget *entryID = GTK_WIDGET(gtk_builder_get_object(builder, "productId"));
+    if (!GTK_IS_ENTRY(entryID))
+    {
+        g_critical("Widget is not GtkEntry");
+        return;
+    }
+    char *idCopy = g_strdup(gtk_entry_get_text(GTK_ENTRY(entryID)));
+    removeProduct(productsArr, idCopy);
+    g_free(idCopy);
+    GtkWidget *window = GTK_WIDGET(gtk_builder_get_object(builder, "deleteProduct"));
+    GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Product deleted successfully!");
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+
+    
+}
+
+void on_but3_clicked(GtkButton *button, gpointer user_data)
+{
+    GtkBuilder *builder;
+    GtkWidget *window;
+    GtkButton *confirmButton;
+
+    builder = gtk_builder_new();
+    gtk_builder_add_from_file(builder, "deleteProduct.glade", NULL);
+    window = GTK_WIDGET(gtk_builder_get_object(builder, "deleteProduct"));
+    confirmButton = GTK_BUTTON(gtk_builder_get_object(builder, "confirmButton"));
+    g_signal_connect(G_OBJECT(confirmButton), "clicked", G_CALLBACK(on_delete_clicked), builder);
+
+    gtk_builder_connect_signals(builder, NULL);
+
+    gtk_widget_show_all(window);
 }
 
 void on_but1_clicked(GtkButton *button, gpointer user_data)
@@ -124,8 +200,6 @@ void on_but1_clicked(GtkButton *button, gpointer user_data)
     gtk_builder_connect_signals(builder, NULL);
 
     gtk_widget_show_all(window);
-
-    // Do not unref the builder here
 }
 
 void create_and_show_window()
@@ -204,6 +278,8 @@ void create_and_show_window()
         printf("Failed to create but3\n");
         return;
     }
+    g_signal_connect(but3, "clicked", G_CALLBACK(on_but3_clicked), NULL);
+
     exit = gtk_button_new_with_label("Exit");
     if (exit == NULL)
     {
