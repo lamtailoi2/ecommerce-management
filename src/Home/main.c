@@ -3,18 +3,25 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
 void on_browse_button_clicked(GtkButton *button, gpointer user_data)
 {
-    gtk_widget_hide(GTK_WIDGET(user_data));
+    GtkWidget *widget = GTK_WIDGET(gtk_builder_get_object(builder, "homeWindow"));
+    if (widget == NULL)
+    {
+        g_critical("Failed to load widget with ID 'widgetID'");
+        return;
+    }
+    gtk_widget_hide(widget);
+
     int result = system("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Shop/shop");
-    if(result == -1)
+    if (result == -1)
     {
         perror("system");
     }
 }
 
-void create_and_show_window() {
+void create_and_show_window()
+{
     GtkBuilder *builder;
     GtkWidget *window;
     GtkButton *browse_button;
@@ -31,7 +38,8 @@ void create_and_show_window() {
     gtk_widget_show_all(window);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     gtk_init(&argc, &argv);
 
     create_and_show_window();

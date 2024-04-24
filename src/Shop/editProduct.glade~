@@ -2,18 +2,18 @@
 <!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
-  <object class="GtkWindow" id="addProduct">
+  <object class="GtkWindow" id="editProduct">
     <property name="can-focus">False</property>
     <child>
       <!-- n-columns=4 n-rows=6 -->
-      <object class="GtkGrid" id="grid">
+      <object class="GtkGrid">
         <property name="can-focus">False</property>
         <property name="row-spacing">10</property>
         <property name="column-spacing">10</property>
         <child>
-          <object class="GtkLabel" id="idLabel">
+          <object class="GtkLabel">
             <property name="can-focus">False</property>
-            <property name="label">ID:</property>
+            <property name="label">Product ID:</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -21,9 +21,19 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="nameLabel">
+          <object class="GtkEntry" id="entryId">
             <property name="can-focus">False</property>
-            <property name="label">Name:</property>
+            <property name="hexpand">True</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="can-focus">False</property>
+            <property name="label">New Name:</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -31,10 +41,9 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="nameEntry">
-            <property name="can-focus">True</property>
+          <object class="GtkEntry" id="entryName">
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
-            <property name="placeholder-text">Name</property>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -42,10 +51,19 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="priceEntry">
-            <property name="can-focus">True</property>
+          <object class="GtkLabel">
+            <property name="can-focus">False</property>
+            <property name="label">New Quantity:</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entryQuantity">
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
-            <property name="placeholder-text">Price</property>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -53,9 +71,9 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="quantityLabel">
+          <object class="GtkLabel">
             <property name="can-focus">False</property>
-            <property name="label">Quantity:</property>
+            <property name="label">New Price:</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -63,10 +81,9 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="quantityEntry">
-            <property name="can-focus">True</property>
+          <object class="GtkEntry" id="entryPrice">
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
-            <property name="placeholder-text">Quantity</property>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -74,9 +91,9 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="imgLabel">
+          <object class="GtkLabel">
             <property name="can-focus">False</property>
-            <property name="label">Product Image:</property>
+            <property name="label">New Image:</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -84,10 +101,9 @@
           </packing>
         </child>
         <child>
-          <object class="GtkFileChooserButton" id="productImg">
-            <property name="can-focus">True</property>
+          <object class="GtkFileChooserButton" id="filechooserImage">
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
-            <property name="title">Select an Image</property>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -95,9 +111,9 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="confirmButton">
-            <property name="label">Confirm</property>
-            <property name="can-focus">True</property>
+          <object class="GtkButton" id="updateButton">
+            <property name="label">Update</property>
+            <property name="can-focus">False</property>
             <property name="receives-default">False</property>
             <property name="hexpand">True</property>
           </object>
@@ -105,27 +121,6 @@
             <property name="left-attach">0</property>
             <property name="top-attach">5</property>
             <property name="width">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="idEntry">
-            <property name="can-focus">True</property>
-            <property name="hexpand">True</property>
-            <property name="placeholder-text">ID</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="priceLabel">
-            <property name="can-focus">False</property>
-            <property name="label">Price:</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
