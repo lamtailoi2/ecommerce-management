@@ -3,32 +3,25 @@
 void on_exitButton_clicked(GtkButton *button, gpointer user_data)
 {
     GtkWidget *window = GTK_WIDGET(user_data);
-    if (window != NULL && GTK_IS_WIDGET(window))
+    if (window != NULL)
     {
         gtk_widget_destroy(window);
     }
-    else
-    {
-        fprintf(stderr, "Error: 'window' is not a valid GtkWidget or is NULL\n");
+    else {
+        printf("Failed to get parent window\n");
     }
+     
 }
 
 void create_and_show_window()
 {
-    // gulong handler_id = g_signal_connect(browseButton, "clicked", G_CALLBACK(on_browseButton_clicked), NULL);
-    // // if (handler_id == 0)
-    // // {
-    // //     printf("Failed to connect signal\n");
-    // // }
-    // window
     GtkWidget *window;
-    // button
     GtkWidget *but1;
     GtkWidget *but2;
     GtkWidget *but3;
     GtkWidget *exit;
-    // fixed
     GtkWidget *fixed;
+    GtkWidget *header_bar;
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     if (window == NULL)
@@ -36,8 +29,12 @@ void create_and_show_window()
         printf("Failed to create window\n");
         return;
     }
-    // Initialize the size of product window
+
     gtk_window_set_default_size(GTK_WINDOW(window), 1400, 700);
+
+    header_bar = gtk_header_bar_new();
+    gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(header_bar), TRUE);
+    gtk_window_set_titlebar(GTK_WINDOW(window), header_bar);
 
     fixed = gtk_fixed_new();
     if (fixed == NULL)
@@ -82,10 +79,8 @@ void create_and_show_window()
 
     gtk_container_add(GTK_CONTAINER(window), fixed);
 
-    // Initialize
     gtk_window_set_title(GTK_WINDOW(window), "Showing product");
 
-    // Showing the product window
     gtk_widget_show_all(window);
 }
 

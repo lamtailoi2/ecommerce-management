@@ -5,6 +5,8 @@
   <object class="GtkApplicationWindow" id="payment">
     <property name="can-focus">False</property>
     <property name="type">popup</property>
+    <property name="default-width">500</property>
+    <property name="default-height">400</property>
     <child>
       <!-- n-columns=3 n-rows=7 -->
       <object class="GtkGrid">
@@ -40,6 +42,7 @@
           <object class="GtkEntry">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="margin-end">20</property>
             <property name="input-purpose">name</property>
           </object>
           <packing>
@@ -52,6 +55,7 @@
           <object class="GtkEntry">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="margin-end">20</property>
             <property name="input-purpose">phone</property>
           </object>
           <packing>
@@ -64,6 +68,7 @@
           <object class="GtkEntry">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="margin-end">20</property>
             <property name="input-purpose">phone</property>
           </object>
           <packing>
@@ -165,28 +170,22 @@
           <object class="GtkLabel" id="hello">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="ypad">10</property>
             <property name="label" translatable="yes">Hello Customer!</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">0</property>
+            <property name="width">3</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkButton" id="backButton">
-            <property name="label" translatable="yes">Back</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-          </object>
-          <packing>
-            <property name="left-attach">2</property>
-            <property name="top-attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
+      </object>
+    </child>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="headerBar">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="show-close-button">True</property>
       </object>
     </child>
   </object>
