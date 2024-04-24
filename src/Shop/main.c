@@ -667,6 +667,7 @@ void create_and_show_window()
 
 void create_and_show_window1()
 {
+    showProduct();
     GtkWidget *window;
     // button
     GtkWidget *but1;
@@ -752,11 +753,71 @@ void create_and_show_window1()
     gtk_widget_show_all(window);
 }
 
+void showProduct() {
+    GtkWidget *tree_view;
+    GtkListStore *list_store;
+    GtkCellRenderer *renderer;
+    GtkTreeViewColumn *column;
+
+    // Create a new GtkTreeView and a GtkListStore
+    tree_view = gtk_tree_view_new();
+    list_store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_STRING, GDK_TYPE_TEXTURE);
+
+    // Set up the columns
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes("Product ID", renderer, "text", 0, NULL);
+    gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view), column);
+
+    column = gtk_tree_view_column_new_with_attributes("Product Name", renderer, "text", 1, NULL);
+    gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view), column);
+
+    column = gtk_tree_view_column_new_with_attributes("Product Price", renderer, "text", 2, NULL);
+    gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view), column);
+
+    // Connect the model to the view
+    gtk_tree_view_set_model(GTK_TREE_VIEW(tree_view), GTK_TREE_MODEL(list_store));
+
+    //grid
+    GtkWidget *grid = gtk_grid_new();
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
+    gtk_grid_set_column_spacing(GTK_GRID(grid), 10);
+
+    FILE *file = fopen("products.csv", "r");
+    if (file != NULL) {
+        char line[128];
+        int row = 0;
+        while (fgets(line, sizeof line, file) != NULL) {
+        char *id, *name, *price;
+        GtkWidget *box, *label;
+
+        // Parse the CSV line
+        id = strtok(line, ",");
+        name = strtok(NULL, ",");
+        price = strtok(NULL, ",");
+
+        // Create a GtkBox for the product
+        box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+        label = gtk_label_new(name);
+        gtk_box_pack_start(GTK_BOX(box), label, TRUE, TRUE, 0);
+        label = gtk_label_new(price);
+        gtk_box_pack_start(GTK_BOX(box), label, TRUE, TRUE, 0);
+
+        // Add the GtkBox to the GtkGrid
+        gtk_grid_attach(GTK_GRID(grid), box, row % 3, row / 3, 1, 1);
+        row++;
+    }
+    fclose(file);
+    }
+}
+
+
 int main(int argc, char *argv[])
 {
     gtk_init(&argc, &argv);
 
     create_and_show_window();
+
+    
 
     gtk_main();
 
