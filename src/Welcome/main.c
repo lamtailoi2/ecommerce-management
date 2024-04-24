@@ -24,6 +24,7 @@ void on_registerButton_clicked(GtkButton *button, gpointer user_data)
     int result = system("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Register/register");
     if (result == -1) {
         perror("system");
+        return;
     }
     
 }
@@ -31,7 +32,9 @@ void on_registerButton_clicked(GtkButton *button, gpointer user_data)
 void on_loginButton_clicked(GtkButton *button, gpointer user_data)
 {
     GtkWidget *welcomeWindow = GTK_WIDGET(user_data);
+    gtk_widget_hide(welcomeWindow);
     int result = system("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Login/login");
+    printf("%d", result);
     if (result == -1) {
         perror("system");
         return;

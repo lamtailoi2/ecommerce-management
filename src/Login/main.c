@@ -109,6 +109,11 @@ void on_loginButton_clicked(GtkButton *button, gpointer user_data)
     }
     printf("Login successful\n");
     int result = system("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Home/myHome");
+    if (result == -1)
+    {
+        perror("system");
+        return;
+    }
     GtkWidget *window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
     gtk_widget_destroy(window);
 
