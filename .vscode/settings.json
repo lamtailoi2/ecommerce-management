@@ -9,6 +9,7 @@
         "gtk.h": "c",
         "stdio.h": "c",
         "password.h": "c",
-        "ios": "c"
+        "ios": "c",
+        "typeinfo": "c"
     }
 }
