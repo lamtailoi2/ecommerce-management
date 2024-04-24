@@ -1,11 +1,13 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <stdbool.h>
 #include "/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Product/product.h"
 #define MAX_PRODUCT 100
 void create_and_show_window();
 void create_and_show_window1();
+void showProduct(void);
 
 Product productsArr[MAX_PRODUCT];
 int initIndex = 0;
@@ -331,6 +333,24 @@ void on_but1_clicked(GtkButton *button, gpointer user_data)
     gtk_widget_show_all(window);
 }
 
+
+void on_refreshButton_clicked( GtkWidget *button, gpointer user_data)
+{
+    GtkWidget *window = GTK_WIDGET(user_data);
+    if (window != NULL && GTK_IS_WIDGET(window))
+    {
+        gtk_widget_destroy(window);
+    }
+    else
+    {
+        fprintf(stderr, "Error: 'window' is not a valid GtkWidget or is NULL\n");
+    }
+    create_and_show_window();
+
+}
+
+
+
 void create_and_show_window()
 {
     // gulong handler_id = g_signal_connect(browseButton, "clicked", G_CALLBACK(on_browseButton_clicked), NULL);
@@ -452,200 +472,227 @@ void create_and_show_window()
     pagenum = gtk_label_new("Page : 1");
     gtk_fixed_put(GTK_FIXED(fixed), pagenum, 1300, 150);
 
-    gia1 = gtk_label_new("$10.00");
-    gia2 = gtk_label_new("$10.00");
-    gia3 = gtk_label_new("$10.00");
-    gia4 = gtk_label_new("$10.00");
-    gia5 = gtk_label_new("$10.00");
-    gia6 = gtk_label_new("$10.00");
-    gia7 = gtk_label_new("$0.01");
-    gia8 = gtk_label_new("$10.00");
 
     /////////////////////////////-//////////////////////////////
 
-    box1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    // Read products from products.csv
+    FILE *file = fopen("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/textDB/products.csv", "r");
+    if (file == NULL) {
+        printf("Failed to open file\n");
+        return;
+    }
 
-    buttonAdd1 = gtk_button_new_with_label("Select");
-    img1 = gtk_image_new_from_file("images/char/1.jpg");
-    label1 = gtk_label_new("ID1");
-    gtk_widget_set_name(label1, "id1");
+    char line[100];
+    int count = 0;
 
-    gtk_box_pack_start(GTK_BOX(box1), buttonAdd1, 0, 0, 5);
+    while (fgets(line, sizeof(line), file)) {
+        // Parse the line to get product details
+        char *id = strtok(line, ",");
+        char *name = strtok(NULL, ",");
+        char *price = strtok(NULL, ",");
 
-    gtk_box_pack_start(GTK_BOX(box1), img1, TRUE, TRUE, 5);
+        // Create box for each product
+        GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
-    gtk_box_pack_start(GTK_BOX(box1), label1, 0, 0, 5);
+        // Create button, image, label, and price for the product
+        GtkWidget *button = gtk_button_new_with_label("Select");
+        GtkWidget *img = gtk_image_new_from_file("images/char/1.jpg");
+        GtkWidget *label = gtk_label_new(name);
+        GtkWidget *priceLabel = gtk_label_new(price);
 
-    gtk_box_pack_start(GTK_BOX(box1), gia1, 0, 0, 5);
+        // Set name for label
+        gtk_widget_set_name(label, id);
 
-    gtk_box_set_spacing(GTK_BOX(box1), 10);
+        // Pack the widgets into the box
+        gtk_box_pack_start(GTK_BOX(box), button, 0, 0, 5);
+        gtk_box_pack_start(GTK_BOX(box), img, TRUE, TRUE, 5);
+        gtk_box_pack_start(GTK_BOX(box), label, 0, 0, 5);
+        gtk_box_pack_start(GTK_BOX(box), priceLabel, 0, 0, 5);
 
-    gtk_widget_set_name(box1, "box1");
+        // Set spacing and name for the box
+        gtk_box_set_spacing(GTK_BOX(box), 10);
+        gtk_widget_set_name(box, id);
 
-    gtk_widget_set_size_request(box1, 100, 100);
+        // Set size request for the box
+        gtk_widget_set_size_request(box, 100, 100);
 
-    gtk_fixed_put(GTK_FIXED(fixed), box1, 400, 120);
+        // Calculate the position to put the box
+        int x = 400 + (count % 4) * 200;
+        int y = 120 + (count / 4) * 200;
 
-    /////////////////////////////-//////////////////////////////
+        // Put the box into the fixed container
+        gtk_fixed_put(GTK_FIXED(fixed), box, x, y);
 
-    box2 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+        count++;
+    }
+    fclose(file);
 
-    img2 = gtk_image_new_from_file("images/char/2.png");
-    label2 = gtk_label_new("ID2");
-    gtk_widget_set_name(label2, "id2");
-    buttonAdd2 = gtk_button_new_with_label("Select");
-
-    gtk_box_pack_start(GTK_BOX(box2), buttonAdd2, 0, 0, 5);
-
-    gtk_box_pack_start(GTK_BOX(box2), img2, 0, 0, 5);
-
-    gtk_box_pack_start(GTK_BOX(box2), label2, 0, 0, 5);
-
-    gtk_box_pack_start(GTK_BOX(box2), gia2, 0, 0, 5);
-
-    gtk_box_set_spacing(GTK_BOX(box2), 10);
-
-    gtk_widget_set_name(box2, "box2");
-
-    gtk_fixed_put(GTK_FIXED(fixed), box2, 600, 120);
-
-    /////////////////////////////-//////////////////////////////
-
-    box3 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-
-    img3 = gtk_image_new_from_file("images/char/3.png");
-    label3 = gtk_label_new("ID3");
-    gtk_widget_set_name(label3, "id3");
-    buttonAdd3 = gtk_button_new_with_label("Select");
-
-    gtk_box_pack_start(GTK_BOX(box3), buttonAdd3, 0, 0, 5);
-
-    gtk_box_pack_start(GTK_BOX(box3), img3, 0, 0, 5);
-
-    gtk_box_pack_start(GTK_BOX(box3), label3, 0, 0, 5);
-
-    gtk_box_pack_start(GTK_BOX(box3), gia3, 0, 0, 5);
-
-    gtk_box_set_spacing(GTK_BOX(box3), 10);
-
-    gtk_widget_set_name(box3, "box3");
-
-    gtk_fixed_put(GTK_FIXED(fixed), box3, 800, 120);
+    // Refresh button
+    GtkWidget *refreshButton;
+    refreshButton = gtk_button_new_with_label("Refresh");
+    g_signal_connect(refreshButton, "clicked", G_CALLBACK(on_refreshButton_clicked), window);
+    gtk_fixed_put(GTK_FIXED(fixed), refreshButton, 1300, 550);
 
     /////////////////////////////-//////////////////////////////
 
-    box4 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    // box2 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
-    img4 = gtk_image_new_from_file("images/char/4.png");
-    label4 = gtk_label_new("ID4");
-    gtk_widget_set_name(label4, "id4");
-    buttonAdd4 = gtk_button_new_with_label("Select");
+    // img2 = gtk_image_new_from_file("images/char/2.png");
+    // label2 = gtk_label_new("ID2");
+    // gtk_widget_set_name(label2, "id2");
+    // buttonAdd2 = gtk_button_new_with_label("Select");
 
-    gtk_box_pack_start(GTK_BOX(box4), buttonAdd4, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box2), buttonAdd2, 0, 0, 5);
 
-    gtk_box_pack_start(GTK_BOX(box4), img4, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box2), img2, 0, 0, 5);
 
-    gtk_box_pack_start(GTK_BOX(box4), label4, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box2), label2, 0, 0, 5);
 
-    gtk_box_pack_start(GTK_BOX(box4), gia4, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box2), gia2, 0, 0, 5);
 
-    gtk_box_set_spacing(GTK_BOX(box4), 10);
+    // gtk_box_set_spacing(GTK_BOX(box2), 10);
 
-    gtk_widget_set_name(box4, "box4");
+    // gtk_widget_set_name(box2, "box2");
 
-    gtk_fixed_put(GTK_FIXED(fixed), box4, 1000, 120);
+    // gtk_fixed_put(GTK_FIXED(fixed), box2, 600, 120);
 
-    /////////////////////////////-//////////////////////////////
+    // /////////////////////////////-//////////////////////////////
 
-    box5 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    // box3 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
-    buttonAdd5 = gtk_button_new_with_label("Select");
-    img5 = gtk_image_new_from_file("images/char/5.png");
-    label5 = gtk_label_new("ID5");
-    gtk_widget_set_name(label5, "id5");
+    // img3 = gtk_image_new_from_file("images/char/3.png");
+    // label3 = gtk_label_new("ID3");
+    // gtk_widget_set_name(label3, "id3");
+    // buttonAdd3 = gtk_button_new_with_label("Select");
 
-    gtk_box_pack_start(GTK_BOX(box5), buttonAdd5, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box3), buttonAdd3, 0, 0, 5);
 
-    gtk_box_pack_start(GTK_BOX(box5), img5, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box3), img3, 0, 0, 5);
 
-    gtk_box_pack_start(GTK_BOX(box5), label5, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box3), label3, 0, 0, 5);
 
-    gtk_box_pack_start(GTK_BOX(box5), gia5, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box3), gia3, 0, 0, 5);
 
-    gtk_box_set_spacing(GTK_BOX(box5), 10);
+    // gtk_box_set_spacing(GTK_BOX(box3), 10);
 
-    gtk_widget_set_name(box5, "box5");
+    // gtk_widget_set_name(box3, "box3");
 
-    gtk_fixed_put(GTK_FIXED(fixed), box5, 400, 400);
+    // gtk_fixed_put(GTK_FIXED(fixed), box3, 800, 120);
 
-    /////////////////////////////-//////////////////////////////
+    // /////////////////////////////-//////////////////////////////
 
-    box6 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    // box4 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
-    buttonAdd6 = gtk_button_new_with_label("Select");
-    img6 = gtk_image_new_from_file("images/char/6.png");
-    label6 = gtk_label_new("ID6");
-    gtk_widget_set_name(label6, "id6");
+    // img4 = gtk_image_new_from_file("images/char/4.png");
+    // label4 = gtk_label_new("ID4");
+    // gtk_widget_set_name(label4, "id4");
+    // buttonAdd4 = gtk_button_new_with_label("Select");
 
-    gtk_box_pack_start(GTK_BOX(box6), buttonAdd6, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box4), buttonAdd4, 0, 0, 5);
 
-    gtk_box_pack_start(GTK_BOX(box6), img6, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box4), img4, 0, 0, 5);
 
-    gtk_box_pack_start(GTK_BOX(box6), label6, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box4), label4, 0, 0, 5);
 
-    gtk_box_pack_start(GTK_BOX(box6), gia6, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box4), gia4, 0, 0, 5);
 
-    gtk_box_set_spacing(GTK_BOX(box6), 10);
+    // gtk_box_set_spacing(GTK_BOX(box4), 10);
 
-    gtk_widget_set_name(box6, "box6");
+    // gtk_widget_set_name(box4, "box4");
 
-    gtk_fixed_put(GTK_FIXED(fixed), box6, 600, 400);
+    // gtk_fixed_put(GTK_FIXED(fixed), box4, 1000, 120);
 
-    /////////////////////////////-//////////////////////////////
+    // /////////////////////////////-//////////////////////////////
 
-    box7 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    // box5 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
-    buttonAdd7 = gtk_button_new_with_label("Select");
-    img7 = gtk_image_new_from_file("images/char/7.png");
-    label7 = gtk_label_new("ID7");
-    gtk_widget_set_name(label6, "id7");
+    // buttonAdd5 = gtk_button_new_with_label("Select");
+    // img5 = gtk_image_new_from_file("images/char/5.png");
+    // label5 = gtk_label_new("ID5");
+    // gtk_widget_set_name(label5, "id5");
 
-    gtk_box_pack_start(GTK_BOX(box7), buttonAdd7, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box5), buttonAdd5, 0, 0, 5);
 
-    gtk_box_pack_start(GTK_BOX(box7), img7, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box5), img5, 0, 0, 5);
 
-    gtk_box_pack_start(GTK_BOX(box7), label7, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box5), label5, 0, 0, 5);
 
-    gtk_box_pack_start(GTK_BOX(box7), gia7, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box5), gia5, 0, 0, 5);
 
-    gtk_box_set_spacing(GTK_BOX(box7), 10);
+    // gtk_box_set_spacing(GTK_BOX(box5), 10);
 
-    gtk_widget_set_name(box7, "box7");
+    // gtk_widget_set_name(box5, "box5");
 
-    gtk_fixed_put(GTK_FIXED(fixed), box7, 800, 400);
+    // gtk_fixed_put(GTK_FIXED(fixed), box5, 400, 400);
 
-    /////////////////////////////-//////////////////////////////
+    // /////////////////////////////-//////////////////////////////
 
-    box8 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    // box6 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
-    buttonAdd8 = gtk_button_new_with_label("Select");
-    img8 = gtk_image_new_from_file("images/char/8.png");
-    label8 = gtk_label_new("ID8");
-    gtk_widget_set_name(label6, "id8");
+    // buttonAdd6 = gtk_button_new_with_label("Select");
+    // img6 = gtk_image_new_from_file("images/char/6.png");
+    // label6 = gtk_label_new("ID6");
+    // gtk_widget_set_name(label6, "id6");
 
-    gtk_box_pack_start(GTK_BOX(box8), buttonAdd8, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box6), buttonAdd6, 0, 0, 5);
 
-    gtk_box_pack_start(GTK_BOX(box8), img8, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box6), img6, 0, 0, 5);
 
-    gtk_box_pack_start(GTK_BOX(box8), label8, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box6), label6, 0, 0, 5);
 
-    gtk_box_pack_start(GTK_BOX(box8), gia8, 0, 0, 5);
+    // gtk_box_pack_start(GTK_BOX(box6), gia6, 0, 0, 5);
 
-    gtk_box_set_spacing(GTK_BOX(box8), 10);
+    // gtk_box_set_spacing(GTK_BOX(box6), 10);
 
-    gtk_widget_set_name(box8, "box8");
+    // gtk_widget_set_name(box6, "box6");
 
-    gtk_fixed_put(GTK_FIXED(fixed), box8, 1000, 400);
+    // gtk_fixed_put(GTK_FIXED(fixed), box6, 600, 400);
+
+    // /////////////////////////////-//////////////////////////////
+
+    // box7 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+
+    // buttonAdd7 = gtk_button_new_with_label("Select");
+    // img7 = gtk_image_new_from_file("images/char/7.png");
+    // label7 = gtk_label_new("ID7");
+    // gtk_widget_set_name(label6, "id7");
+
+    // gtk_box_pack_start(GTK_BOX(box7), buttonAdd7, 0, 0, 5);
+
+    // gtk_box_pack_start(GTK_BOX(box7), img7, 0, 0, 5);
+
+    // gtk_box_pack_start(GTK_BOX(box7), label7, 0, 0, 5);
+
+    // gtk_box_pack_start(GTK_BOX(box7), gia7, 0, 0, 5);
+
+    // gtk_box_set_spacing(GTK_BOX(box7), 10);
+
+    // gtk_widget_set_name(box7, "box7");
+
+    // gtk_fixed_put(GTK_FIXED(fixed), box7, 800, 400);
+
+    // /////////////////////////////-//////////////////////////////
+
+    // box8 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+
+    // buttonAdd8 = gtk_button_new_with_label("Select");
+    // img8 = gtk_image_new_from_file("images/char/8.png");
+    // label8 = gtk_label_new("ID8");
+    // gtk_widget_set_name(label6, "id8");
+
+    // gtk_box_pack_start(GTK_BOX(box8), buttonAdd8, 0, 0, 5);
+
+    // gtk_box_pack_start(GTK_BOX(box8), img8, 0, 0, 5);
+
+    // gtk_box_pack_start(GTK_BOX(box8), label8, 0, 0, 5);
+
+    // gtk_box_pack_start(GTK_BOX(box8), gia8, 0, 0, 5);
+
+    // gtk_box_set_spacing(GTK_BOX(box8), 10);
+
+    // gtk_widget_set_name(box8, "box8");
+
+    // gtk_fixed_put(GTK_FIXED(fixed), box8, 1000, 400);
 
     back = gtk_button_new_with_label("Back");
     g_signal_connect(G_OBJECT(back), "clicked", G_CALLBACK(on_back_button_clicked), window);
@@ -665,93 +712,93 @@ void create_and_show_window()
     gtk_widget_show_all(window);
 }
 
-void create_and_show_window1()
-{
-    showProduct();
-    GtkWidget *window;
-    // button
-    GtkWidget *but1;
-    GtkWidget *but2;
-    GtkWidget *but3;
-    // exit
-    GtkWidget *exit;
-    // pages
-    GtkWidget *next, *back;
-    // fixed
-    GtkWidget *fixed;
-    // box
-    GtkWidget *box1, *box2, *box3, *box4, *box5, *box6, *box7, *box8;
-    // buttonAdd
-    GtkWidget *buttonAdd1, *buttonAdd2, *buttonAdd3, *buttonAdd4, *buttonAdd5, *buttonAdd6, *buttonAdd7, *buttonAdd8;
-    // label
-    GtkWidget *label1, *label2, *label3, *label4, *label5, *label6, *label7, *label8;
-    // products images
-    GtkWidget *img1, *img2, *img3, *img4, *img5, *img6, *img7, *img8;
+// void create_and_show_window1()
+// {
+//     showProduct();
+//     GtkWidget *window;
+//     // button
+//     GtkWidget *but1;
+//     GtkWidget *but2;
+//     GtkWidget *but3;
+//     // exit
+//     GtkWidget *exit;
+//     // pages
+//     GtkWidget *next, *back;
+//     // fixed
+//     GtkWidget *fixed;
+//     // box
+//     GtkWidget *box1, *box2, *box3, *box4, *box5, *box6, *box7, *box8;
+//     // buttonAdd
+//     GtkWidget *buttonAdd1, *buttonAdd2, *buttonAdd3, *buttonAdd4, *buttonAdd5, *buttonAdd6, *buttonAdd7, *buttonAdd8;
+//     // label
+//     GtkWidget *label1, *label2, *label3, *label4, *label5, *label6, *label7, *label8;
+//     // products images
+//     GtkWidget *img1, *img2, *img3, *img4, *img5, *img6, *img7, *img8;
 
-    // menu, search bar, verticalbox_left
-    GtkWidget *menu, *VerticalBox_Left, *hboxsear;
+//     // menu, search bar, verticalbox_left
+//     GtkWidget *menu, *VerticalBox_Left, *hboxsear;
 
-    GtkWidget *searchLabel;
-    GtkWidget *searchProducts;
-    GtkWidget *searchButton;
+//     GtkWidget *searchLabel;
+//     GtkWidget *searchProducts;
+//     GtkWidget *searchButton;
 
-    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    if (window == NULL)
-    {
-        printf("Failed to create window\n");
-        return;
-    }
-    // Initialize the size of product window
-    gtk_window_set_default_size(GTK_WINDOW(window), 1400, 700);
+//     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+//     if (window == NULL)
+//     {
+//         printf("Failed to create window\n");
+//         return;
+//     }
+//     // Initialize the size of product window
+//     gtk_window_set_default_size(GTK_WINDOW(window), 1400, 700);
 
-    fixed = gtk_fixed_new();
-    if (fixed == NULL)
-    {
-        printf("Failed to create fixed\n");
-        return;
-    }
+//     fixed = gtk_fixed_new();
+//     if (fixed == NULL)
+//     {
+//         printf("Failed to create fixed\n");
+//         return;
+//     }
 
-    but1 = gtk_button_new_with_label("Add products");
-    if (but1 == NULL)
-    {
-        printf("Failed to create but1\n");
-        return;
-    }
-    but2 = gtk_button_new_with_label("Edit products");
-    if (but2 == NULL)
-    {
-        printf("Failed to create but2\n");
-        return;
-    }
-    but3 = gtk_button_new_with_label("Delete products");
-    if (but3 == NULL)
-    {
-        printf("Failed to create but3\n");
-        return;
-    }
-    exit = gtk_button_new_with_label("Exit");
-    if (exit == NULL)
-    {
-        printf("Failed to create exit button\n");
-        return;
-    }
-    gtk_fixed_put(GTK_FIXED(fixed), exit, 1300, 25);
-    g_signal_connect(exit, "clicked", G_CALLBACK(on_exitButton_clicked), window);
+//     but1 = gtk_button_new_with_label("Add products");
+//     if (but1 == NULL)
+//     {
+//         printf("Failed to create but1\n");
+//         return;
+//     }
+//     but2 = gtk_button_new_with_label("Edit products");
+//     if (but2 == NULL)
+//     {
+//         printf("Failed to create but2\n");
+//         return;
+//     }
+//     but3 = gtk_button_new_with_label("Delete products");
+//     if (but3 == NULL)
+//     {
+//         printf("Failed to create but3\n");
+//         return;
+//     }
+//     exit = gtk_button_new_with_label("Exit");
+//     if (exit == NULL)
+//     {
+//         printf("Failed to create exit button\n");
+//         return;
+//     }
+//     gtk_fixed_put(GTK_FIXED(fixed), exit, 1300, 25);
+//     g_signal_connect(exit, "clicked", G_CALLBACK(on_exitButton_clicked), window);
 
-    gtk_fixed_put(GTK_FIXED(fixed), but1, 25, 550);
-    gtk_fixed_put(GTK_FIXED(fixed), but2, 25, 600);
-    gtk_fixed_put(GTK_FIXED(fixed), but3, 25, 650);
+//     gtk_fixed_put(GTK_FIXED(fixed), but1, 25, 550);
+//     gtk_fixed_put(GTK_FIXED(fixed), but2, 25, 600);
+//     gtk_fixed_put(GTK_FIXED(fixed), but3, 25, 650);
 
-    g_signal_connect(window, "delete-event", G_CALLBACK(gtk_main_quit), NULL);
+//     g_signal_connect(window, "delete-event", G_CALLBACK(gtk_main_quit), NULL);
 
-    gtk_container_add(GTK_CONTAINER(window), fixed);
+//     gtk_container_add(GTK_CONTAINER(window), fixed);
 
-    // Initialize
-    gtk_window_set_title(GTK_WINDOW(window), "Showing product");
+//     // Initialize
+//     gtk_window_set_title(GTK_WINDOW(window), "Showing product");
 
-    // Showing the product window
-    gtk_widget_show_all(window);
-}
+//     // Showing the product window
+//     gtk_widget_show_all(window);
+// }
 
 void showProduct() {
     GtkWidget *tree_view;
@@ -761,7 +808,7 @@ void showProduct() {
 
     // Create a new GtkTreeView and a GtkListStore
     tree_view = gtk_tree_view_new();
-    list_store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_STRING, GDK_TYPE_TEXTURE);
+    list_store = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_STRING, GDK_TYPE_PIXBUF);
 
     // Set up the columns
     renderer = gtk_cell_renderer_text_new();
@@ -782,7 +829,7 @@ void showProduct() {
     gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
     gtk_grid_set_column_spacing(GTK_GRID(grid), 10);
 
-    FILE *file = fopen("products.csv", "r");
+    FILE *file = fopen("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/textDB/products.csv", "r");
     if (file != NULL) {
         char line[128];
         int row = 0;
@@ -817,7 +864,6 @@ int main(int argc, char *argv[])
 
     create_and_show_window();
 
-    
 
     gtk_main();
 
