@@ -10,6 +10,7 @@
         "stdio.h": "c",
         "password.h": "c",
         "ios": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "variant": "c"
     }
 }

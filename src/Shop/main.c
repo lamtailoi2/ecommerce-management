@@ -127,7 +127,7 @@ void on_confirmButton_clicked(GtkButton *button, gpointer user_data)
     gtk_widget_grab_focus(entryID);
 }
 
-void removeProduct(Product productsArr[], char id[])
+void removeProduct(Product productsArr[], const char *id)
 {
     // Find the product with the given ID
     int index = -1;
@@ -500,6 +500,14 @@ void create_and_show_window()
         GtkWidget *img = gtk_image_new_from_file("images/char/1.jpg");
         GtkWidget *label = gtk_label_new(name);
         GtkWidget *priceLabel = gtk_label_new(price);
+        char idText[50];
+        sprintf(idText, "Id: %s", id);
+        // Create a label for the id text
+        GtkWidget *idLabel = gtk_label_new(idText);
+        // Set name for the label
+        gtk_widget_set_name(idLabel, "idLabel");
+        // Pack the label into the box
+        gtk_box_pack_start(GTK_BOX(box), idLabel, 0, 0, 5);
 
         // Set name for label
         gtk_widget_set_name(label, id);
@@ -509,6 +517,7 @@ void create_and_show_window()
         gtk_box_pack_start(GTK_BOX(box), img, TRUE, TRUE, 5);
         gtk_box_pack_start(GTK_BOX(box), label, 0, 0, 5);
         gtk_box_pack_start(GTK_BOX(box), priceLabel, 0, 0, 5);
+        gtk_box_pack_start(GTK_BOX(box), idLabel, 0, 0, 5);
 
         // Set spacing and name for the box
         gtk_box_set_spacing(GTK_BOX(box), 10);
@@ -521,7 +530,7 @@ void create_and_show_window()
         int x = 400 + (count % 4) * 200;
         int y = 120 + (count / 4) * 200;
 
-        // Put the box into the fixed container
+       
         gtk_fixed_put(GTK_FIXED(fixed), box, x, y);
 
         count++;
