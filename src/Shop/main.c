@@ -4,7 +4,7 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <stdbool.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include "/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Product/product.h"
+#include "D:/Work/programming/vsc/product/product.h"
 #define MAX_PRODUCT 100
 void create_and_show_window();
 void create_and_show_window1();
@@ -50,6 +50,11 @@ void on_next_button_clicked(GtkWidget *button, gpointer data)
 
 void on_back_button_clicked(GtkWidget *button, gpointer user_data)
 {
+}
+
+//Added function for Payment button
+void on_Payment_button_clicked(GtkWidget *button, gpointer user_data){
+
 }
 
 void addProduct(Product productsArr[], const char *id, const char *name, float price, int quantity, const char *img)
@@ -127,7 +132,7 @@ void on_confirmButton_clicked(GtkButton *button, gpointer user_data)
     gtk_widget_grab_focus(entryID);
 }
 
-void removeProduct(Product productsArr[], const char *id)
+void removeProduct(Product productsArr[], char id[])
 {
     // Find the product with the given ID
     int index = -1;
@@ -438,7 +443,8 @@ void create_and_show_window()
         printf("Failed to create exit button\n");
         return;
     }
-    gtk_fixed_put(GTK_FIXED(fixed), exit, 1300, 25);
+    //Exit button position fixed
+    gtk_fixed_put(GTK_FIXED(fixed), exit, 25, 25);
     g_signal_connect(exit, "clicked", G_CALLBACK(on_exitButton_clicked), window);
 
     gtk_fixed_put(GTK_FIXED(fixed), but1, 25, 550);
@@ -449,6 +455,7 @@ void create_and_show_window()
 
     gtk_container_add(GTK_CONTAINER(window), fixed);
 
+    //Search label position fixed to the middle of products review
     searchLabel = gtk_label_new("Search product: ");
     searchButton = gtk_button_new_from_icon_name("system-search", 1);
     searchProducts = gtk_search_entry_new();
@@ -458,8 +465,25 @@ void create_and_show_window()
     gtk_box_pack_start(GTK_BOX(hboxsear), searchProducts, 0, 0, 0);
     gtk_box_pack_start(GTK_BOX(hboxsear), searchButton, 0, 0, 0);
 
-    gtk_fixed_put(GTK_FIXED(fixed), hboxsear, 650, 50);
+    gtk_fixed_put(GTK_FIXED(fixed), hboxsear, 593, 50);
 
+    //Added ID search label
+    GtkWidget *searchIDLabel = gtk_label_new("Search ID : ");
+    GtkWidget *searchIDButton = gtk_button_new_from_icon_name("system-search", 1);
+    GtkWidget *searchIDProducts = gtk_search_entry_new();
+
+    GtkWidget *hboxsear1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_pack_start(hboxsear1, searchIDLabel, 0, 0, 0);
+    gtk_box_pack_start(hboxsear1, searchIDProducts, 0, 0, 0);
+    gtk_box_pack_start(hboxsear1, searchIDButton, 0, 0, 0);
+
+    gtk_fixed_put(GTK_FIXED(fixed), hboxsear1, 1150, 550);
+
+    //Added Payment button
+    GtkWidget *payment = gtk_button_new_with_label("Payment");
+    gtk_fixed_put(GTK_FIXED(fixed), payment, 1250, 600);
+
+    // Cart with position fixed to the right of window
     menu = gtk_label_new("ID       NAME      PRICE");
     gtk_widget_set_name(menu, "menu");
     VerticalBox_Left = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
@@ -467,11 +491,11 @@ void create_and_show_window()
     gtk_box_pack_start(GTK_BOX(VerticalBox_Left), menu, TRUE, 0, 0);
 
     gtk_widget_set_name(VerticalBox_Left, "VerticalBox_Left");
+    gtk_fixed_put(GTK_FIXED(fixed), VerticalBox_Left, 1230, 100);
 
-    gtk_fixed_put(GTK_FIXED(fixed), VerticalBox_Left, 35, 50);
-
+    //Page number position fixed
     pagenum = gtk_label_new("Page : 1");
-    gtk_fixed_put(GTK_FIXED(fixed), pagenum, 1300, 150);
+    gtk_fixed_put(GTK_FIXED(fixed), pagenum, 200, 650);
 
 
     /////////////////////////////-//////////////////////////////
@@ -500,14 +524,6 @@ void create_and_show_window()
         GtkWidget *img = gtk_image_new_from_file("images/char/1.jpg");
         GtkWidget *label = gtk_label_new(name);
         GtkWidget *priceLabel = gtk_label_new(price);
-        char idText[50];
-        sprintf(idText, "Id: %s", id);
-        // Create a label for the id text
-        GtkWidget *idLabel = gtk_label_new(idText);
-        // Set name for the label
-        gtk_widget_set_name(idLabel, "idLabel");
-        // Pack the label into the box
-        gtk_box_pack_start(GTK_BOX(box), idLabel, 0, 0, 5);
 
         // Set name for label
         gtk_widget_set_name(label, id);
@@ -517,7 +533,6 @@ void create_and_show_window()
         gtk_box_pack_start(GTK_BOX(box), img, TRUE, TRUE, 5);
         gtk_box_pack_start(GTK_BOX(box), label, 0, 0, 5);
         gtk_box_pack_start(GTK_BOX(box), priceLabel, 0, 0, 5);
-        gtk_box_pack_start(GTK_BOX(box), idLabel, 0, 0, 5);
 
         // Set spacing and name for the box
         gtk_box_set_spacing(GTK_BOX(box), 10);
@@ -530,7 +545,7 @@ void create_and_show_window()
         int x = 400 + (count % 4) * 200;
         int y = 120 + (count / 4) * 200;
 
-       
+        // Put the box into the fixed container
         gtk_fixed_put(GTK_FIXED(fixed), box, x, y);
 
         count++;
@@ -712,8 +727,10 @@ void create_and_show_window()
 
     // g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
-    gtk_fixed_put(GTK_FIXED(fixed), next, 1300, 600);
-    gtk_fixed_put(GTK_FIXED(fixed), back, 1300, 650);
+    //Back and next button position fixed to the top of products list
+    gtk_fixed_put(GTK_FIXED(fixed), next, 1035, 50);
+    gtk_fixed_put(GTK_FIXED(fixed), back, 400, 50);
+
 
     // Initialize
     gtk_window_set_title(GTK_WINDOW(window), "Showing product");
@@ -839,7 +856,8 @@ void showProduct() {
     gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
     gtk_grid_set_column_spacing(GTK_GRID(grid), 10);
 
-    FILE *file = fopen("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/textDB/products.csv", "r");
+    //FILE *file = fopen("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/textDB/products.csv", "r");
+    FILE *file = fopen("D:/Work/programming/vsc/assas/products.csv", "r");
     if (file != NULL) {
         char line[128];
         int row = 0;
