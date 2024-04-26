@@ -64,9 +64,65 @@ Product getSelectedProduct(GtkWidget *button)
     Product emptyProduct;
     return emptyProduct;
 }
+
+void updateProductQuantity(Product product, int newQuantity, const char *id) {
+    
+     // Read all products from the file into itemsArr
+    FILE *file = fopen("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/textDB/products.csv", "r");
+    if (file != NULL)
+    {
+        Product itemsArr[MAX_PRODUCT];
+        int initIndex = 0;
+        char line[256];
+        while (fgets(line, sizeof(line), file))
+        {
+            char *token = strtok(line, ",");
+            strcpy(itemsArr[initIndex].id, token);
+            token = strtok(NULL, ",");
+            strcpy(itemsArr[initIndex].name, token);
+            token = strtok(NULL, ",");
+            itemsArr[initIndex].price = atof(token);
+            token = strtok(NULL, ",");
+            itemsArr[initIndex].quantity = atoi(token);
+            token = strtok(NULL, ",");
+            token[strcspn(token, "\n")] = 0; // Remove the newline character from the end of token
+            strcpy(itemsArr[initIndex].img, token);
+            initIndex++;
+        }
+        fclose(file);
+
+        // Find the product with the given ID and update its information
+        bool found = false;
+        for (int i = 0; i < initIndex; i++)
+        {
+            if (strcmp(itemsArr[i].id, id) == 0)
+            {
+                // strcpy(itemsArr[i].name, name);
+                // itemsArr[i].price = price;
+                itemsArr[i].quantity = newQuantity;
+                // strcpy(itemsArr[i].img, img);
+                found = true;
+                break;
+            }
+        }
+
+        // Write the updated products back to the file
+        file = fopen("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/textDB/products.csv", "w");
+        if (file != NULL)
+        {
+            for (int i = 0; i < initIndex; i++)
+            {
+                fprintf(file, "%s,%s,%.2f,%d,%s\n", itemsArr[i].id, itemsArr[i].name, itemsArr[i].price, itemsArr[i].quantity, itemsArr[i].img);
+            }
+            fclose(file);
+        }
+    }
+}
+
 void on_selectButton_clicked(GtkWidget *button, gpointer user_data)
 {
     Product selected_product = getSelectedProduct(button);
+    int cnt = 0;
     printf("Selected Product:\n");
     printf("Product ID: %s\n", selected_product.id);
     printf("Product Name: %s\n", selected_product.name);
@@ -74,24 +130,47 @@ void on_selectButton_clicked(GtkWidget *button, gpointer user_data)
     printf("Product Quantity: %d\n", selected_product.quantity);
     printf("Product Image: %s\n", selected_product.img);
     if (cartIndex < 100)
-    { // Check if the cart is not full
+    {
+        
+    if (selected_product.quantity > 0)
+    {
+        // Check if the cart is not full
+        printf("Current Quantity: %d\n", selected_product.quantity);
         cartList[cartIndex] = selected_product;
+        int current = selected_product.quantity -= 1;
         cartIndex++;
+        updateProductQuantity(selected_product, current, selected_product.id);  // Update quantity in products.csv
+    }
+        else
+        {
+            GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(user_data), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Product is out of stock!");
+            gtk_dialog_run(GTK_DIALOG(dialog));
+            gtk_widget_destroy(dialog);
+        }
     }
     else
     {
         g_print("Cart is full\n");
     }
+    printf("Current Quantity: %d\n", selected_product.quantity);
 }
 
 bool isIdUnique(const char *id)
 {
-    for (int i = 0; i < initIndex; i++)
+    FILE *file = fopen("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/textDB/products.csv", "r");
+    if (file != NULL)
     {
-        if (strcmp(productsArr[i].id, id) == 0)
+        char line[100];
+        while (fgets(line, sizeof(line), file))
         {
-            return false;
+            char *token = strtok(line, ",");
+            if (token != NULL && strcmp(token, id) == 0)
+            {
+                fclose(file);
+                return false;
+            }
         }
+        fclose(file);
     }
     return true;
 }
@@ -779,6 +858,7 @@ void create_and_show_window()
         char *id = strtok(line, ",");
         char *name = strtok(NULL, ",");
         char *price = strtok(NULL, ",");
+        char *quantity = strtok(NULL, ",");
 
         // Create box for each product
         GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
@@ -787,10 +867,10 @@ void create_and_show_window()
         GtkWidget *button = gtk_button_new_with_label("Select");
         g_signal_connect(button, "clicked", G_CALLBACK(on_selectButton_clicked), NULL);
         GtkWidget *img = gtk_image_new_from_file("images/char/1.jpg");
-        GtkWidget *label = gtk_label_new(name);
+        GtkWidget *label = gtk_label_new(g_strdup_printf("Name: %s", name));
         GtkWidget *idLabel = gtk_label_new(g_strdup_printf("%s", id));
-        GtkWidget *priceLabel = gtk_label_new(price);
-
+        GtkWidget *priceLabel = gtk_label_new(g_strdup_printf("Price: %s", price));
+        GtkWidget *quantityLabel = gtk_label_new(g_strdup_printf("Quantity: %s", quantity));
         // Set name for label
         gtk_widget_set_name(label, id);
 
@@ -799,6 +879,7 @@ void create_and_show_window()
         gtk_box_pack_start(GTK_BOX(box), idLabel, 0, 0, 5);
         gtk_box_pack_start(GTK_BOX(box), img, TRUE, TRUE, 5);
         gtk_box_pack_start(GTK_BOX(box), label, 0, 0, 5);
+        gtk_box_pack_start(GTK_BOX(box), quantityLabel, 0, 0, 5);
         gtk_box_pack_start(GTK_BOX(box), priceLabel, 0, 0, 5);
 
         // Set spacing and name for the box
