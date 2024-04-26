@@ -262,7 +262,7 @@ void on_confirmButton_clicked(GtkButton *button, gpointer user_data)
         return;
     }
 
-    addProduct(productsArr, id, name, price, quantity, "images/char/1.jpg");
+    addProduct(productsArr, id, name, price, quantity, "/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Imgs/img3.png");
 
     // Show a dialog to notify
     GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Product added successfully!");
@@ -454,7 +454,7 @@ void on_updateButton_clicked(GtkButton *button, gpointer user_data)
     double price = atof(priceText);
     int quantity = atoi(quantityText);
 
-    editProduct(id, name, price, quantity, "images/char/1.jpg");
+    editProduct(id, name, price, quantity, "/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Imgs/img3.png");
 
     GtkWidget *window = GTK_WIDGET(gtk_builder_get_object(builder, "editProduct"));
 
@@ -571,7 +571,7 @@ void printOrders(const char *customerNameText, const char *customerPhoneText, co
 
 void on_order_button_clicked(GtkButton *button, gpointer user_data)
 {
-
+    
     for (int i = 0; i < cartIndex; i++)
     {
         cartList[i] = (Product){0}; // Clear each element of the cartList array
@@ -866,7 +866,7 @@ void create_and_show_window()
         // Create button, image, label, and price for the product
         GtkWidget *button = gtk_button_new_with_label("Select");
         g_signal_connect(button, "clicked", G_CALLBACK(on_selectButton_clicked), NULL);
-        GtkWidget *img = gtk_image_new_from_file("images/char/1.jpg");
+        GtkWidget *img = gtk_image_new_from_file("/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Imgs/img3.png");
         GtkWidget *label = gtk_label_new(g_strdup_printf("Name: %s", name));
         GtkWidget *idLabel = gtk_label_new(g_strdup_printf("%s", id));
         GtkWidget *priceLabel = gtk_label_new(g_strdup_printf("Price: %s", price));
