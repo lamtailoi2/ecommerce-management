@@ -584,19 +584,6 @@ void on_order_button_clicked(GtkButton *button, gpointer user_data)
     gtk_widget_hide(GTK_WIDGET(user_data));
 }
 
-// void on_paymentButton_clicked(GtkWidget *widget, gpointer user_data) {
-//     GtkBuilder *builder;
-//     GtkWidget *window;
-
-//     builder = gtk_builder_new();
-//     gtk_builder_add_from_file(builder, "/Users/tranquangsang/Desktop/lamtailoi/shop-management/src/Shop/Payment.glade", NULL);
-
-//     window = GTK_WIDGET(gtk_builder_get_object(builder, "payment"));
-
-//     gtk_builder_connect_signals(builder, NULL);
-
-//     gtk_widget_show_all(window);
-// }
 
 void on_paymentButton_clicked(GtkWidget *widget, gpointer user_data)
 {
@@ -656,11 +643,11 @@ void on_paymentButton_clicked(GtkWidget *widget, gpointer user_data)
         paymentMethod = "Cash";
     }
 
-    const char *customerNameText = gtk_entry_get_text(customerName);
-    const char *customerPhoneText = gtk_entry_get_text(customerPhone);
-    const char *customerAddressText = gtk_entry_get_text(customerAddress);
-    puts(customerNameText);
-    printOrders(gtk_entry_get_text(customerName), customerPhoneText, customerAddressText, paymentMethod, totalPrice);
+    // const char *customerNameText = gtk_entry_get_text(customerName);
+    // const char *customerPhoneText = gtk_entry_get_text(customerPhone);
+    // const char *customerAddressText = gtk_entry_get_text(customerAddress);
+    // puts(customerNameText);
+    printOrders(gtk_entry_get_text(customerName), gtk_entry_get_text(customerPhone), gtk_entry_get_text(customerAddress), paymentMethod, totalPrice);
 
     order_button = GTK_BUTTON(gtk_builder_get_object(builder, "orderButton"));
 
